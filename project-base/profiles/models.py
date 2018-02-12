@@ -26,12 +26,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    #REQUIRED_FIELDS = ['username', 'gender' ]
+    #REQUIRED_FIELDS = ['name']
     
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    
     def __unicode__(self):
 
         return u"Email: {}".format(self.email)
@@ -42,13 +43,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         
         return self.email
 
+    
     def get_full_name(self):
         """Return the user full name."""
         name = u"{} {}".format(self.first_name, self.last_name)
         return name.strip()
 
+    
     def get_short_name(self):
         """Return the user short name."""
         
-        return u"{}".format(self.username)
+        return u"{}".format(self.email)
     
