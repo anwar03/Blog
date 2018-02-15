@@ -1,18 +1,16 @@
 from django.shortcuts import render
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 
-# Create your views here.
 
-class HelloApiView(APIView):
-    """Test API View."""
+from . import serializers
+from .models import User
 
-    def get(self, request, format=None):
-        """Return a list of Api view."""
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """creating, reading and updating User."""
 
-        an_apiview = [
-            'Uses HTTP method as function (GET, POST, PUT, PATCH, DELETE)'
-        ]
-
-        return Response({'message': 'Hello world!', 'an_apiview': an_apiview })
+    serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
