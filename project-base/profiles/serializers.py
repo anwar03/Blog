@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'gender', 'password']
-        read_only_fields = ('id', 'is_active', 'is_superuser', 'is_staff', 'date_joined')
+        #read_only_fields = ('id', 'is_active', 'is_superuser', 'is_staff', 'date_joined')
         extra_kwargs = {'password': {'write_only': True }}
 
     def create(self, validated_data):
@@ -28,3 +28,5 @@ class UserSerializer(serializers.ModelSerializer):
 
 
         return user 
+
+    
