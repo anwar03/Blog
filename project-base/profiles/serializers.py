@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User
+from .models import User, UserFeed
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -27,6 +27,15 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
 
-        return user 
+        return user
+
+class FeedSerializer(serializers.ModelSerializer):
+    """User Feed serializer."""
+
+    class Meta:
+        model = UserFeed
+        fields = ('id', 'user', 'status_text', 'created_on')
+        extra_kwargs = {'user': {'read_only': True }}
+
 
     
