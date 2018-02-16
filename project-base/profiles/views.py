@@ -8,10 +8,11 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from . import serializers
 from .models import User, UserFeed
-from .permissions import UserUpdatePermission
+from .permissions import UserUpdatePermission, FeedUpdatePermission
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -39,9 +40,11 @@ class LoginViewSet(viewsets.ViewSet):
 class FeedViewSet(viewsets.ModelViewSet):
     """Creating, reading, and updating user feed."""
 
+    permission_classes = (FeedUpdatePermission, IsAuthenticated )
     authentication_classes = (TokenAuthentication, )
     serializer_class = serializers.FeedSerializer
     queryset = UserFeed.objects.all()
+    
 
     def perform_create(self, serializer):
         """Set the user profile to the logger in user."""

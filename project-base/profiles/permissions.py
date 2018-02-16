@@ -12,3 +12,13 @@ class UserUpdatePermission(permissions.BasePermission):
 
         return obj.id == request.user.id
 
+
+class FeedUpdatePermission(permissions.BasePermission):
+    """Allow user to updating their own status."""
+
+    def has_object_permission(self, request, view, obj):
+        
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        return obj.user.id == request.user.id
