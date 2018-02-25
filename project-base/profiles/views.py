@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -11,7 +11,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from . import serializers
-from .models import User, UserFeed
+from .models import User
 from .permissions import UserUpdatePermission, FeedUpdatePermission
 
 
@@ -21,7 +21,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     queryset = User.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (UserUpdatePermission, )
+    permission_classes = (UserUpdatePermission, IsAuthenticated)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('email', 'first_name',)
 
@@ -36,7 +36,7 @@ class LoginViewSet(viewsets.ViewSet):
 
         return ObtainAuthToken().post(request)
 
-
+'''
 class FeedViewSet(viewsets.ModelViewSet):
     """Creating, reading, and updating user feed."""
 
@@ -44,6 +44,8 @@ class FeedViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication, )
     serializer_class = serializers.FeedSerializer
     queryset = UserFeed.objects.all()
+    filter_backends = (filters.OrderingFilter,)
+    ordering = ('-created_on',)
     
 
     def perform_create(self, serializer):
@@ -51,3 +53,17 @@ class FeedViewSet(viewsets.ModelViewSet):
 
         serializer.save(user = self.request.user)
 
+
+class UserBaseFeedList(viewsets.ModelViewSet):
+    """feed list for only own user."""
+
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (FeedUpdatePermission, IsAuthenticatedOrReadOnly)
+    serializer_class = serializers.FeedSerializer
+    
+
+    def get_queryset(self):
+        queryset = UserFeed.objects.filter(user=self.request.user)
+        return queryset
+
+'''

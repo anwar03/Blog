@@ -1,9 +1,6 @@
 from django.contrib.auth.models import BaseUserManager
 from django.utils import timezone
 
-import logging
-
-logger = logging.getLogger(__name__)
 
 class UserManager(BaseUserManager):
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User, UserFeed
+from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
         return user
-
+'''
 class FeedSerializer(serializers.ModelSerializer):
     """User Feed serializer."""
 
@@ -38,4 +38,4 @@ class FeedSerializer(serializers.ModelSerializer):
         extra_kwargs = {'user': {'read_only': True }}
 
 
-    
+    '''
