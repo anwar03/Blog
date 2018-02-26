@@ -35,35 +35,3 @@ class LoginViewSet(viewsets.ViewSet):
         """use the obtainAuthToken ApiView to validate and create a token."""
 
         return ObtainAuthToken().post(request)
-
-'''
-class FeedViewSet(viewsets.ModelViewSet):
-    """Creating, reading, and updating user feed."""
-
-    permission_classes = (FeedUpdatePermission, IsAuthenticated )
-    authentication_classes = (TokenAuthentication, )
-    serializer_class = serializers.FeedSerializer
-    queryset = UserFeed.objects.all()
-    filter_backends = (filters.OrderingFilter,)
-    ordering = ('-created_on',)
-    
-
-    def perform_create(self, serializer):
-        """Set the user profile to the logger in user."""
-
-        serializer.save(user = self.request.user)
-
-
-class UserBaseFeedList(viewsets.ModelViewSet):
-    """feed list for only own user."""
-
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (FeedUpdatePermission, IsAuthenticatedOrReadOnly)
-    serializer_class = serializers.FeedSerializer
-    
-
-    def get_queryset(self):
-        queryset = UserFeed.objects.filter(user=self.request.user)
-        return queryset
-
-'''

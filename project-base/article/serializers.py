@@ -14,7 +14,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ['id', 'author', 'title', 'article']
         #extra_kwargs = {'author': {'read_only': True }}
 
-
 class CommentSerializer(serializers.ModelSerializer):
     """Comment serializer."""
 
@@ -25,3 +24,12 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'article', 'created_by', 'edited', 'comment']
         extra_kwargs = {'edited': {'read_only': True }}
+
+
+class ArticleDetailSerializer(ArticleSerializer):
+    author = UserSerializer(read_only=True)
+    comment = CommentSerializer(read_only=True)
+    
+    class Meta:
+        model = Article
+        fields = ['id', 'author', 'title', 'article', 'comment']

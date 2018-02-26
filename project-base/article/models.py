@@ -15,7 +15,7 @@ class Article(models.Model):
     view = models.PositiveIntegerField(default = 0)
 
     class Meta:
-        ordering = ('created_at', )
+        ordering = ('-created_at', )
         verbose_name = _('Article')
         verbose_name_plural = _('Articles')
 
@@ -36,7 +36,7 @@ class Comment(models.Model):
     edited = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('created_at', )
+        ordering = ('-created_at', )
         verbose_name = _('Comment')
         verbose_name_plural = _('Comments')
 
