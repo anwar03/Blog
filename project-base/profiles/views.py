@@ -20,7 +20,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.UserSerializer
     queryset = User.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    #authentication_classes = (TokenAuthentication,)
     permission_classes = (UserUpdatePermission, IsAuthenticated)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('email', 'first_name',)
