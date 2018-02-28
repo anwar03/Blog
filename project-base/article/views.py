@@ -8,52 +8,59 @@ from rest_framework import serializers
 
 from . import serializers
 from .models import Article, Comment, Reply
-from .permissions import UpdatePermission
+from .permissions import ArticleUpdatePermission, CommentUpdatePermission
 
-class ArticleList(generics.ListCreateAPIView):
+class ArticleListAPIView(generics.ListCreateAPIView):
     """Create and Retrun article list."""
 
     serializer_class = serializers.ArticleSerializer
-    permisstion_classes = (IsAuthenticatedOrReadOnly, UpdatePermission)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     #authentication_classes = (TokenAuthentication, )
     queryset = Article.objects.all()
-    ordering = ('-created_at', )
 
     def perform_create(self, serializer):
         """Set the user profile to the logger in user."""
         
         serializer.validated_data['author'] = self.request.user
-        return super(ArticleList, self).perform_create(serializer)
+        return super(ArticleListAPIView, self).perform_create(serializer)
 
 
-class ArticleDetails(generics.RetrieveUpdateDestroyAPIView):
+class ArticleDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     
-    permisstion_classes = (UpdatePermission, IsAuthenticatedOrReadOnly)
-    serializer_class = serializers.ArticleDetailSerializer
-    queryset = Article.objects.filter()
-    lookup_field = 'pk'
+    permission_classes = (ArticleUpdatePermission, IsAuthenticatedOrReadOnly)
+    serializer_class = serializers.ArticleSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-    
+    def get_queryset(self):
+        queryset = Article.objects.filter(id=self.kwargs.get('pk'))
+        return queryset
 
 
-class CommentList(generics.ListCreateAPIView):
-    """Create and Return comment list."""
+class CommentListAPIView(generics.ListCreateAPIView):
+    """Create and Return comments list."""
 
     serializer_class = serializers.CommentSerializer
-    permisstion_classes = (IsAuthenticatedOrReadOnly, UpdatePermission)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     #authentication_classes = (TokenAuthentication, )
-    queryset = Comment.objects.filter()
-    lookup_field = 'pk'
     
+    def get_queryset(self):
+        queryset = Comment.objects.filter(article_id=self.kwargs.get('pk'))
+        return queryset
+
     def perform_create(self, serializer):
-        """Set the user profile to the logged in uesr."""
+        """Set the user profile to the logged in uesr and define article."""
         
-        self.article = get_object_or_404(Article, pk=self.kwargs.get('pk'))
-        print('article: ', self.article)
+        self.article = Article.objects.filter(pk=self.kwargs.get('pk'))
         serializer.validated_data['article'] = self.article
         serializer.validated_data['created_by'] = self.request.user
-        return super(CommentList, self).perform_create(serializer)
+        return super(CommentListAPIView, self).perform_create(serializer)
+
+
+class CommentDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve, Update and Delete Comment."""
+
+    serializer_class = serializers.CommentDetailsSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, CommentUpdatePermission)
+
+    def get_queryset(self):
+        queryset = Comment.objects.filter(id=self.kwargs.get('pk'))
+        return queryset

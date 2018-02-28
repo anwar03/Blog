@@ -1,8 +1,8 @@
 from rest_framework import permissions
 
 
-class UpdatePermission(permissions.BasePermission):
-    """own status update."""
+class ArticleUpdatePermission(permissions.BasePermission):
+    """own Article Update and Delete permission."""
 
     def has_object_permission(self, request, view, obj):
 
@@ -10,4 +10,15 @@ class UpdatePermission(permissions.BasePermission):
             return True
         
         
-        return False 
+        return obj.author.id == request.user.id 
+
+
+class CommentUpdatePermission(permissions.BasePermission):
+    """Own Comment Update and Delete permission."""
+
+    def has_object_permission(self, request, view, obj):
+        
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.created_by.id == request.user.id
