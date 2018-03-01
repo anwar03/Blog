@@ -20,7 +20,7 @@ class Article(models.Model):
         verbose_name_plural = _('Articles')
 
     def __str__(self):
-        truncated_article = Truncator(self.article)
+        truncated_article = Truncator(self.title)
         return truncated_article.chars(100)
     
 
@@ -36,7 +36,7 @@ class Comment(models.Model):
     edited = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('created_at', )
+        ordering = ('-created_at', )
         verbose_name = _('Comment')
         verbose_name_plural = _('Comments')
 
@@ -54,7 +54,7 @@ class Reply(models.Model):
     edited = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('created_at', )
+        ordering = ('-created_at', )
 
 
     def __str__(self):

@@ -40,3 +40,29 @@ class CommentDetailsSerializer(serializers.ModelSerializer):
             'edited': {'read_only': True },
             }
 
+
+class ReplySerializer(serializers.ModelSerializer):
+    """Reply serializer."""
+
+    class Meta:
+        model = Reply
+        fields = ['id', 'reply', 'comment', 'created_by', 'created_at', 'edited']
+        extra_kwargs = {
+            'edited': {'read_only': True},
+            'comment': { 'read_only': True },
+            'created_by': { 'read_only': True },
+            }
+
+
+class ReplyDetailsSerializer(serializers.ModelSerializer):
+    """Comment Details serializer."""
+
+    comment = CommentSerializer(read_only=True)
+    created_by = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Reply
+        fields = ['id', 'reply', 'comment', 'created_by', 'created_at', 'edited']
+        extra_kwargs = {
+            'edited': {'read_only': True },
+            }
