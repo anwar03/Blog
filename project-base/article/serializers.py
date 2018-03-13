@@ -5,14 +5,6 @@ from .models import Article, Comment, Reply
 from profiles.serializers import UserSerializer
 
 
-class ArticleSerializer(serializers.ModelSerializer):
-    """Article serializer."""
-    author = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Article
-        fields = ['id', 'author', 'title', 'article']
-
 
 class CommentSerializer(serializers.ModelSerializer):
     """Comment serializer."""
@@ -25,6 +17,16 @@ class CommentSerializer(serializers.ModelSerializer):
             'article': {'read_only': True },
             'created_by': {'read_only': True},
             }
+
+class ArticleSerializer(serializers.ModelSerializer):
+    """Article serializer."""
+    author = UserSerializer(read_only=True)
+    comment = CommentSerializer(many=True)
+
+    class Meta:
+        model = Article
+        fields = ['id', 'author', 'title', 'article', 'comment']
+
 
 
 class CommentDetailsSerializer(serializers.ModelSerializer):
