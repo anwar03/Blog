@@ -22,10 +22,9 @@ class Article(models.Model):
     def __str__(self):
         truncated_article = Truncator(self.title)
         return truncated_article.chars(100)
-    
 
     def get_last_three_comments(self):
-        return self.comments.order_by('-created_at')[:3]
+        return self.comments.order_by('-created_at')[:5]
 
 
 class Comment(models.Model):
@@ -43,7 +42,6 @@ class Comment(models.Model):
     def __str__(self):
         truncated_comment = Truncator(self.comment)
         return truncated_comment.chars(100)
-    
     
 
 class Reply(models.Model):

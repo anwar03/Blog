@@ -5,55 +5,33 @@ from .models import Article, Comment, Reply
 from profiles.serializers import UserSerializer
 
 
-
-class CommentSerializer(serializers.ModelSerializer):
-    """Comment serializer."""
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'article', 'created_by', 'edited', 'comment']
-        extra_kwargs = {
-            'edited': {'read_only': True },
-            'article': {'read_only': True },
-            'created_by': {'read_only': True},
-            }
-
-class ArticleSerializer(serializers.ModelSerializer):
-    """Article serializer."""
-    author = UserSerializer(read_only=True)
-    comment = CommentSerializer(many=True)
-
-    class Meta:
-        model = Article
-        fields = ['id', 'author', 'title', 'article', 'comment']
-
-
-
-class CommentDetailsSerializer(serializers.ModelSerializer):
-    """Comment Details serializer."""
-
-    article = ArticleSerializer(read_only=True)
-    created_by = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'article', 'created_by', 'edited', 'comment']
-        extra_kwargs = {
-            'edited': {'read_only': True },
-            }
-
-
 class ReplySerializer(serializers.ModelSerializer):
     """Reply serializer."""
 
     class Meta:
         model = Reply
         fields = ['id', 'reply', 'comment', 'created_by', 'created_at', 'edited']
-        extra_kwargs = {
-            'edited': {'read_only': True},
-            'comment': { 'read_only': True },
-            'created_by': { 'read_only': True },
-            }
+        read_only_fields = ('edited', 'comment', 'created_by')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """Comment serializer."""
+    replys = ReplySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'article', 'created_by', 'edited', 'comment', 'replys']
+        read_only_fields = ('edited', 'article', 'created_by')
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+    """Article serializer."""
+    author = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Article
+        fields = ['id', 'author', 'title', 'article']
+
 
 
 class ReplyDetailsSerializer(serializers.ModelSerializer):
@@ -68,3 +46,27 @@ class ReplyDetailsSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'edited': {'read_only': True },
             }
+
+
+class CommentDetailsSerializer(serializers.ModelSerializer):
+    """Comment Details serializer."""
+
+    article = ArticleSerializer(read_only=True)
+    created_by = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'article', 'created_by', 'edited', 'comment']
+        read_only_fields = ('article', 'edited')
+
+
+
+class ArticleDetailsSerializer(serializers.ModelSerializer):
+    """Article serializer."""
+    author = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Article
+        fields = ['id', 'author', 'title', 'article']
+
+

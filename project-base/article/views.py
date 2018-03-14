@@ -28,7 +28,7 @@ class ArticleListAPIView(generics.ListCreateAPIView):
 class ArticleDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     
     permission_classes = (ArticleUpdatePermission, IsAuthenticatedOrReadOnly)
-    serializer_class = serializers.ArticleSerializer
+    serializer_class = serializers.ArticleDetailsSerializer
 
     def get_queryset(self):
         queryset = Article.objects.filter(id=self.kwargs.get('pk'))
