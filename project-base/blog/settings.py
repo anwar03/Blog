@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     #user define app
     'profiles',
     'article',
+    'tag',
+    'favorite',
 
     
 ]

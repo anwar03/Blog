@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.text import Truncator
 from django.conf import settings
 
-
+from tag.models import Tag
 
 class Article(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = 'users', on_delete = models.CASCADE, blank=True)
@@ -13,6 +13,7 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add = timezone.now())
     updated_at = models.DateTimeField(auto_now_add = True)
     view = models.PositiveIntegerField(default = 0)
+    tag = models.ManyToManyField(Tag)
 
     class Meta:
         ordering = ('-created_at', )
